@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d12e16ff-fb36-4ac4-b8ee-a235c0334712" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="8b2b4a4c-9350-40a6-97b9-56046f517f24" >
+		<salesforce:basic-connection username="${sfdc.username}" password="Shakirsha1" securityToken="${sfdc.securityToken}" url="https://login.salesforce.com/services/Soap/u/49.0"/>
+	</salesforce:sfdc-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="b451c3b5-9c6a-4594-90a3-237f3d99f618" >
+		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.username}" database="salesforce" />
+	</db:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="57b9e4b2-eaad-425b-a504-18a016f12fc1" file="config.yaml" />
+	<flow name="hackathonFlow" doc:id="97c15248-f2f6-429c-a7f8-68371f47b46c" >
+		<scheduler doc:name="Scheduler" doc:id="6d0a0b22-f3f6-4d8c-be6d-de501acf2edb" >
+			<scheduling-strategy >
+				<cron expression="0  * 20 * * ?" timeZone="Australia/ACT" />
+			</scheduling-strategy>
+		</scheduler>
+		<db:select doc:name="Select" doc:id="bfb5259a-a4fa-4256-adf4-6c227fb8fa6a" config-ref="Database_Config">
+			<db:sql ><![CDATA[Select * from employee]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="908baf46-ec65-4698-9c88-c2b296919959">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map {
+	
+	id: payload.id,
+	name :payload.name,
+	Email : payload.email,
+	age : payload.age,
+	city :payload.city,
+	project:payload.project,
+	manager:payload.manager
+	
+}
+	]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create doc:name="Create" doc:id="c449f37d-8a33-44f0-a23c-9e44d52dd407" config-ref="Salesforce_Config" type="contact"/>
+		<logger level="INFO" doc:name="Logger" doc:id="0c492f97-a658-4875-a5d5-38c23f6ab334" message="DOne"/>
+	</flow>
+</mule>

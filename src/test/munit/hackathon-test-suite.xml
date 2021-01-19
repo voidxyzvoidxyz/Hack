@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="hackathon-test-suite.xml" />
+	<munit:test name="hackathon-test-suite-hackathonFlowTest" doc:id="fc1cbd7e-5c7f-4704-bca9-407116d99040" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to hackathonFlow" doc:id="6895184d-b6d8-4f13-b8d4-1debcdcf449c" name="hackathonFlow"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

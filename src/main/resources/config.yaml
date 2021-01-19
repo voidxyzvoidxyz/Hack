@@ -1,0 +1,12 @@
+http:
+  port : "8081"
+  
+db:
+  host :    "localhost"
+  username : "root" 
+  port : "3306"
+  
+sfdc:
+  username : "ms1@apisero.com"
+  password : "Shakirsha1"
+  securityToken : "FPqZnarHhpI5oowCVDmIQJZq"    
