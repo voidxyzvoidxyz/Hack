@@ -1,0 +1,116 @@
+#%RAML 1.0
+title: ClientABC
+description: Employee Tracking System
+
+
+/Employees:
+  get:
+    description: To get all the Employee Details
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            example: !include  /Example/Empdata.raml
+      404:
+        body:
+          application/json:
+                  example:
+                   { "msg" : "Page Not Found"  }  
+      400:
+        body:
+          application/json:
+            example:
+              {"msg"  : "Bad Request"}
+              
+/Employees/{Empid}:
+  get:
+    description: Get an Employee detail based on EmployeeId
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            example:  !include /Example/EmpById.raml
+      404:
+        body:
+          application/json:
+                  example:
+                    {"msg" : "Page Not Found" }         
+
+/Employees/create:
+  post:
+    description: Create an Employee 
+    body:
+      application/json:
+        type: object
+        example: !include /Example/Data.raml
+    responses:
+        201:
+         body:
+          application/json:
+            example:
+              {
+                "msg" : "Employee added successfully"
+              }
+
+/Employees/update:
+  put:
+    description: Update an Employee Detail based on a queryparameter
+    queryParameters:
+      id:
+        required: true
+        type: number
+      Name:
+        required: true
+        type: string
+        
+        
+    body:
+      application/json:
+        type: object
+        example: !include  /Example/Data.raml
+           
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              {
+                "msg" : "Employee Detail updated successfully"
+              }
+      404:
+        body:
+          application/json:
+               example:
+                 {
+                   "msg" : "Resource Not found"
+                 }                                             
+                                                                                                                               
+/Employees/delete:
+  delete:
+    description:  To Delete an Employee  
+    queryParameters:
+      id:
+        required: true
+        type: number
+      Name:
+        required: true
+        type: string
+    body:
+      application/json:
+        type: object
+        example: !include  /Example/Data.raml
+           
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              {
+                "msg" : "Employee Detail deleted successfully"
+              }                                                                                                 
+
+        
+              
+      
